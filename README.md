@@ -1,4 +1,4 @@
-# AI Follow-up (No Perifit)
+# AI Follow-up
 
 This is a SillyTavern extension that automatically sends a follow-up message when the assistant includes a wait tag like:
 
@@ -15,4 +15,4 @@ This is a SillyTavern extension that automatically sends a follow-up message whe
 
 ## GitHub
 
-Project home: https://github.com/yourname/ai-followup
+Project home: https://github.com/Taruk0/ai-followup
