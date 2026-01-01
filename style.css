@@ -1,0 +1,486 @@
+/* ============================
+   AI-Followup — cute-but-classy glass
+   + lightweight tooltips
+   ============================ */
+
+:root {
+    /* Subtle accents; kept gentle for GitHub/public use */
+    --aif-accent: rgba(255, 150, 215, 0.70);  /* soft pink */
+    --aif-accent2: rgba(170, 140, 255, 0.60); /* soft lilac */
+    --aif-good: #4CAF50;
+    --aif-warn: #FF9800;
+    --aif-danger: #f44336;
+
+    --aif-glass-bg: rgba(0, 0, 0, 0.45);
+    --aif-glass-border: rgba(255, 255, 255, 0.12);
+    --aif-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+
+    --aif-tip-bg: rgba(18, 18, 18, 0.82);
+    --aif-tip-border: rgba(255, 255, 255, 0.16);
+}
+
+/* ============================
+   Tooltips (pure CSS)
+   Add class .aif-tip + data-aif-tip="..."
+   ============================ */
+
+.aif-tip {
+    position: relative;
+}
+
+.aif-tip[data-aif-tip]:hover::after,
+.aif-tip[data-aif-tip]:focus-visible::after {
+    content: attr(data-aif-tip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+    z-index: 1000000;
+
+    max-width: 340px;
+    width: max-content;
+    padding: 8px 10px;
+    border-radius: 12px;
+
+    background: var(--aif-tip-bg);
+    border: 1px solid var(--aif-tip-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--aif-shadow);
+
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: normal;
+
+    opacity: 1;
+    pointer-events: none;
+}
+
+.aif-tip[data-aif-tip]:hover::before,
+.aif-tip[data-aif-tip]:focus-visible::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 4px);
+    transform: translateX(-50%) rotate(45deg);
+    width: 10px;
+    height: 10px;
+
+    background: var(--aif-tip-bg);
+    border-left: 1px solid var(--aif-tip-border);
+    border-top: 1px solid var(--aif-tip-border);
+    z-index: 1000001;
+
+    pointer-events: none;
+}
+
+/* Avoid tooltip overflow on very small screens */
+@media (max-width: 520px) {
+    .aif-tip[data-aif-tip]:hover::after,
+    .aif-tip[data-aif-tip]:focus-visible::after {
+        max-width: 85vw;
+    }
+}
+
+/* ============================
+   Countdown bubble (glass)
+   ============================ */
+
+#ai-followup-countdown {
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+    z-index: 9998;
+
+    display: none;
+    pointer-events: none;
+}
+
+#ai-followup-countdown.is-visible {
+    display: block;
+}
+
+#ai-followup-countdown .aif-countdown {
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+
+    background: var(--SmartThemeBlurTintColor, var(--aif-glass-bg));
+    border: 1px solid var(--SmartThemeBorderColor, var(--aif-glass-border));
+    border-radius: 16px;
+    padding: 14px;
+    min-width: 210px;
+
+    box-shadow: var(--aif-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    color: var(--SmartThemeBodyColor, #fff);
+}
+
+/* Gloss highlight + subtle gradient tint */
+#ai-followup-countdown .aif-countdown::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), transparent 42%),
+        radial-gradient(140px 110px at 18% 0%, var(--aif-accent), transparent 60%),
+        radial-gradient(170px 120px at 92% 12%, var(--aif-accent2), transparent 65%);
+}
+
+.aif-countdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    opacity: 0.90;
+}
+
+.aif-countdown-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.aif-countdown-icon {
+    font-size: 14px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+}
+
+.aif-countdown-close {
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.06);
+    color: inherit;
+
+    padding: 2px 10px;
+    border-radius: 12px;
+    transition: background 0.15s ease, transform 0.08s ease, border-color 0.15s ease;
+    user-select: none;
+}
+
+.aif-countdown-close:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255,255,255,0.16);
+}
+
+.aif-countdown-close:active {
+    transform: translateY(1px);
+}
+
+.aif-countdown-time {
+    font-size: 32px;
+    font-weight: 800;
+    text-align: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+    letter-spacing: -0.02em;
+
+    color: var(--aif-good);
+    text-shadow: 0 0 12px rgba(0,0,0,0.25);
+    transition: color 0.25s ease;
+}
+
+.aif-countdown-time.is-pulse {
+    animation: aifPulse 0.9s ease-in-out infinite;
+}
+
+@keyframes aifPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.95; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.aif-progress-track {
+    height: 7px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    margin: 10px 0 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.aif-progress-bar {
+    height: 100%;
+    width: 100%;
+    border-radius: 999px;
+    transition: width 1s linear;
+    background: linear-gradient(90deg, var(--aif-accent), var(--aif-accent2));
+}
+
+.aif-countdown-status {
+    font-size: 11px;
+    text-align: center;
+    opacity: 0.72;
+}
+
+/* States driven by data-state */
+#ai-followup-countdown[data-state="warn"] .aif-countdown-time { color: var(--aif-warn); }
+#ai-followup-countdown[data-state="warn"] .aif-progress-bar {
+    background: linear-gradient(90deg, rgba(255,152,0,0.95), rgba(255,193,7,0.95));
+}
+
+#ai-followup-countdown[data-state="danger"] .aif-countdown-time { color: var(--aif-danger); }
+#ai-followup-countdown[data-state="danger"] .aif-progress-bar {
+    background: linear-gradient(90deg, rgba(244,67,54,0.95), rgba(255,107,107,0.95));
+}
+
+/* ============================
+   Settings panel polish (glass)
+   ============================ */
+
+.ai-followup-settings .aif-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.ai-followup-settings .aif-content {
+    padding-top: 2px;
+}
+
+.ai-followup-settings .ai-followup-info {
+    margin: 10px 0 12px;
+    padding: 12px;
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.ai-followup-settings .aif-info-title {
+    font-weight: 800;
+    margin-bottom: 8px;
+    opacity: 0.92;
+}
+
+.ai-followup-settings .aif-info-sub {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.78;
+    line-height: 1.35;
+}
+
+.ai-followup-settings .aif-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ai-followup-settings .aif-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+}
+
+/* Make the toggles feel “contained” */
+.ai-followup-settings .aif-toggle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    margin: 6px 0 10px;
+}
+
+.ai-followup-settings .aif-toggle {
+    margin: 0 !important;
+    padding: 8px 10px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.ai-followup-settings .aif-field {
+    margin-top: 10px;
+}
+
+.ai-followup-settings .aif-label {
+    display: block;
+    margin: 8px 0 6px;
+    font-weight: 700;
+    opacity: 0.92;
+}
+
+.ai-followup-settings #ai_followup_custom_msg {
+    width: 100%;
+    resize: vertical;
+    min-height: 78px;
+}
+
+/* Preview */
+.ai-followup-settings .aif-preview-wrap {
+    margin-top: 10px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.ai-followup-settings .aif-preview-title {
+    font-size: 12px;
+    padding: 8px 10px;
+    opacity: 0.75;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.ai-followup-settings .aif-preview {
+    margin: 0;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.35;
+    white-space: pre-wrap;
+}
+
+/* Buttons: keep your nice layout */
+.ai-followup-settings .aif-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.ai-followup-settings .aif-actions .menu_button {
+    flex: 1 1 140px;
+    width: auto;
+    min-height: 34px;
+    white-space: nowrap;
+}
+
+/* ============================
+   Custom toast fallback (glass)
+   ============================ */
+
+.aif-toast-container {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.aif-toast {
+    pointer-events: none;
+    min-width: 240px;
+    max-width: 360px;
+    padding: 10px 12px;
+    border-radius: 16px;
+
+    background: rgba(22, 22, 22, 0.72);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow: var(--aif-shadow);
+
+    transform: translateY(-6px);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    overflow: hidden;
+}
+
+.aif-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.aif-toast-title {
+    font-weight: 800;
+    font-size: 12px;
+    opacity: 0.88;
+    margin-bottom: 2px;
+}
+
+.aif-toast-body {
+    font-size: 13px;
+    line-height: 1.25;
+    opacity: 0.94;
+}
+
+/* Accent strip */
+.aif-toast::before {
+    content: "";
+    display: block;
+    height: 3px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, var(--aif-accent), var(--aif-accent2));
+}
+
+.aif-toast.aif-success::before { background: rgba(76, 175, 80, 0.95); }
+.aif-toast.aif-warn::before { background: rgba(255, 152, 0, 0.95); }
+.aif-toast.aif-error::before { background: rgba(244, 67, 54, 0.95); }
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    #ai-followup-countdown {
+        bottom: 80px;
+        right: 10px;
+        left: 10px;
+    }
+
+    #ai-followup-countdown .aif-countdown {
+        min-width: auto;
+    }
+
+    .aif-countdown-time {
+        font-size: 28px;
+    }
+
+    .aif-toast-container {
+        left: 12px;
+        right: 12px;
+    }
+
+    .aif-toast {
+        min-width: unset;
+        max-width: unset;
+    }
+
+    .ai-followup-settings .aif-toggle-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* GitHub link pill */
+.ai-followup-settings .aif-gh {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.1px;
+    opacity: 0.9;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    transition: transform 120ms ease, opacity 120ms ease;
+}
+.ai-followup-settings .aif-gh:hover {
+    transform: translateY(-1px);
+    opacity: 1;
+}
+.ai-followup-settings .aif-gh i {
+    font-size: 14px;
+}

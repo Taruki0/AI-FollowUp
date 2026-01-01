@@ -1,0 +1,13 @@
+{
+    "display_name": "AI Follow-up",
+    "loading_order": 10,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "YourName",
+    "version": "1.5.0",
+    "description": "AI automatically follows up when user doesn't respond in time (Perifit integration removed).",
+    "homepage_url": "https://github.com/yourname/ai-followup",
+    "repository": "https://github.com/yourname/ai-followup"
+}
