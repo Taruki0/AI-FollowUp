@@ -1,4 +1,4 @@
-# AI Follow-up
+# AI-FollowUp
 
 This is a SillyTavern extension that automatically sends a follow-up message when the assistant includes a wait tag like:
 
