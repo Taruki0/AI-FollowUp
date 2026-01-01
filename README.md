@@ -34,4 +34,4 @@ Then reload SillyTavern and open **Extensions → AI Follow-up**.
 
 ## GitHub
 
-Project home: https://github.com/Taruk0/ai-followup
+Project home: https://github.com/Taruki0/AI-FollowUp
