@@ -1,8 +1,3 @@
-/* ============================
-   AI-Followup — cute-but-classy glass
-   + lightweight tooltips
-   ============================ */
-
 :root {
     /* Subtle accents; kept gentle for GitHub/public use */
     --aif-accent: rgba(255, 150, 215, 0.70);  /* soft pink */
@@ -18,11 +13,6 @@
     --aif-tip-bg: rgba(18, 18, 18, 0.82);
     --aif-tip-border: rgba(255, 255, 255, 0.16);
 }
-
-/* ============================
-   Tooltips (pure CSS)
-   Add class .aif-tip + data-aif-tip="..."
-   ============================ */
 
 .aif-tip {
     position: relative;
@@ -84,7 +74,7 @@
 }
 
 /* ============================
-   Countdown bubble (glass)
+   Countdown bubble
    ============================ */
 
 #ai-followup-countdown {
@@ -232,7 +222,7 @@
 }
 
 /* ============================
-   Settings panel polish (glass)
+   Settings panel polish
    ============================ */
 
 .ai-followup-settings .aif-header {
@@ -364,7 +354,7 @@
 }
 
 /* ============================
-   Custom toast fallback (glass)
+   Custom toast fallback
    ============================ */
 
 .aif-toast-container {
